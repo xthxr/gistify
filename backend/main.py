@@ -42,7 +42,7 @@ async def summarize_url(request: Request):
         content = content[:5000]
 
         # Prepare request to DeepSeek API
-        api_url = "https://api.deepseek.ai/analyze"  # Replace with official endpoint if different
+        api_url = "https://api.deepseek.com/chat/completions"  # Replace with official endpoint if different
         headers = {
             "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
             "Content-Type": "application/json"
