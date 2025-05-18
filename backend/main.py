@@ -2,17 +2,16 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 from bs4 import BeautifulSoup
-import openai
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 
 app = FastAPI()
 
-# Allow frontend requests
+# Enable CORS so frontend can call backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -22,8 +21,8 @@ app.add_middleware(
 )
 
 @app.get("/")
-def read_root():
-    return {"message": "Web summarizer is running!"}
+def home():
+    return {"message": "DeepSeek summarizer backend is live!"}
 
 @app.post("/summarize")
 async def summarize_url(request: Request):
@@ -33,22 +32,34 @@ async def summarize_url(request: Request):
         return {"error": "URL is required"}
 
     try:
-        # Fetch and parse content
+        # Fetch webpage content
         res = requests.get(url)
         soup = BeautifulSoup(res.text, "html.parser")
         paragraphs = soup.find_all("p")
-        content = ' '.join(p.get_text() for p in paragraphs)[:4000]  # GPT limit
+        content = ' '.join(p.get_text() for p in paragraphs)
+        
+        # Optional: Limit content length (API dependent)
+        content = content[:5000]
 
-        # Summarize using GPT
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": "Summarize the content of the webpage in 5 bullet points."},
-                {"role": "user", "content": content}
-            ]
-        )
+        # Prepare request to DeepSeek API
+        api_url = "https://api.deepseek.ai/analyze"  # Replace with official endpoint if different
+        headers = {
+            "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "url": url,
+            "task": "summarize",   # Adjust if DeepSeek uses another param for summary
+            "text": content       # If DeepSeek supports sending raw text (else remove)
+        }
 
-        summary = response.choices[0].message.content.strip()
+        response = requests.post(api_url, headers=headers, json=payload)
+        response.raise_for_status()
+        result = response.json()
+
+        # Extract summary from response (check DeepSeek docs)
+        summary = result.get("summary") or "No summary returned from DeepSeek."
+
         return {"summary": summary}
 
     except Exception as e:
