@@ -1,66 +1,57 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-import requests
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from bs4 import BeautifulSoup
+import requests as req
+import requests
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
+app = Flask(__name__)
+CORS(app)
+
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+DEEPSEEK_API_URL = 'https://api.deepseek.com/chat/completions'
 
-app = FastAPI()
-
-# Enable CORS so frontend can call backend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/")
+@app.route('/')
 def home():
-    return {"message": "DeepSeek summarizer backend is live!"}
+    return "DeepSeek Summarizer Backend Running"
 
-@app.post("/summarize")
-async def summarize_url(request: Request):
-    data = await request.json()
-    url = data.get("url")
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    data = request.json
+    url = data.get('url')
+
     if not url:
-        return {"error": "URL is required"}
+        return jsonify({"error": "URL is required"}), 400
 
     try:
-        # Fetch webpage content
-        res = requests.get(url)
-        soup = BeautifulSoup(res.text, "html.parser")
-        paragraphs = soup.find_all("p")
-        content = ' '.join(p.get_text() for p in paragraphs)
-        
-        # Optional: Limit content length (API dependent)
-        content = content[:5000]
-
-        # Prepare request to DeepSeek API
-        api_url = "https://api.deepseek.com/chat/completions"  # Replace with official endpoint if different
-        headers = {
-            "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
-            "Content-Type": "application/json"
-        }
-        payload = {
-            "url": url,
-            "task": "summarize",   # Adjust if DeepSeek uses another param for summary
-            "text": content       # If DeepSeek supports sending raw text (else remove)
-        }
-
-        response = requests.post(api_url, headers=headers, json=payload)
-        response.raise_for_status()
-        result = response.json()
-
-        # Extract summary from response (check DeepSeek docs)
-        summary = result.get("summary") or "No summary returned from DeepSeek."
-
-        return {"summary": summary}
-
+        page = req.get(url, timeout=10)
+        soup = BeautifulSoup(page.text, 'html.parser')
+        text = soup.get_text()
     except Exception as e:
-        return {"error": str(e)}
+        return jsonify({"error": f"Failed to fetch webpage: {str(e)}"}), 400
+
+    prompt = f"Summarize the following webpage content in short:\n\n{text[:4000]}"
+
+    payload = {
+        "model": "deepseek-chat",
+        "messages": [
+            {"role": "system", "content": "You are a helpful summarizer."},
+            {"role": "user", "content": prompt}
+        ]
+    }
+
+    headers = {
+        "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    try:
+        response = requests.post(DEEPSEEK_API_URL, headers=headers, json=payload)
+        response.raise_for_status()
+        summary = response.json()['choices'][0]['message']['content']
+        return jsonify({"summary": summary})
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
