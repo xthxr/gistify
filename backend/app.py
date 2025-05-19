@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()  # Load .env file (for local dev)
 
 # Replace hardcoded API key with:
-deepseek = DeepSeekAI(api_key=os.getenv('DEEPSEEK_API_KEY'))
+deepseek = DeepSeekAI(api_key=os.getenv('sk-666bb328bd094c619cd37c64044b7355'))
 
 app = Flask(__name__)
 
