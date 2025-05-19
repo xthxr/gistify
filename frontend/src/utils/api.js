@@ -1,9 +1,8 @@
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export const summarizeUrl = async (url) => {
-  const response = await fetch('https://your-render-backend-url/summarize', {
+  const response = await fetch(`${BACKEND_URL}/summarize`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ url }),
   });
   
