@@ -1,83 +1,47 @@
-import React, { useState } from "react";
+// File: frontend/src/App.js
 
-function App() {
-  const [url, setUrl] = useState("");
-  const [summary, setSummary] = useState("");
+import React, { useState } from 'react';
+import axios from 'axios';
+import './App.css';
+
+const App = () => {
+  const [url, setUrl] = useState('');
+  const [summary, setSummary] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL || "";
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSummary("");
-    setError("");
-    if (!url) {
-      setError("Please enter a URL");
-      return;
-    }
+  const handleSummarize = async () => {
     setLoading(true);
+    setError('');
+    setSummary('');
     try {
-      const response = await fetch(`${backendUrl}/summarize`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
-      const data = await response.json();
-      if (data.error) {
-        setError(data.error);
-      } else {
-        setSummary(data.summary);
-      }
+      const response = await axios.post(
+        process.env.REACT_APP_BACKEND_URL + '/summarize',
+        { url }
+      );
+      setSummary(response.data.summary);
     } catch (err) {
-      setError("Failed to fetch summary");
+      setError(err.message);
     }
     setLoading(false);
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "auto", padding: 20 }}>
+    <div className="container">
       <h1>DeepSeek Webpage Summarizer</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="url"
-          placeholder="Enter webpage URL"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          style={{ width: "100%", padding: 10, fontSize: 16 }}
-          required
-        />
-        <button
-          type="submit"
-          style={{
-            marginTop: 10,
-            padding: "10px 20px",
-            fontSize: 16,
-            cursor: "pointer",
-          }}
-          disabled={loading}
-        >
-          {loading ? "Summarizing..." : "Summarize"}
-        </button>
-      </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {summary && (
-        <div
-          style={{
-            marginTop: 20,
-            whiteSpace: "pre-wrap",
-            backgroundColor: "#f0f0f0",
-            padding: 15,
-            borderRadius: 5,
-          }}
-        >
-          <h3>Summary:</h3>
-          <p>{summary}</p>
-        </div>
-      )}
+      <input
+        type="text"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        placeholder="https://example.com"
+      />
+      <button onClick={handleSummarize} disabled={loading}>
+        {loading ? 'Summarizing...' : 'Summarize'}
+      </button>
+      {summary && <p className="summary">{summary}</p>}
+      {error && <p className="error">{error}</p>}
     </div>
   );
-}
+};
 
 export default App;
