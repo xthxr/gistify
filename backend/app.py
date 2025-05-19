@@ -2,6 +2,13 @@ from flask import Flask, request, jsonify
 import requests
 from bs4 import BeautifulSoup
 from deepseek_api import DeepSeekAI  # Assuming you have API access
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load .env file (for local dev)
+
+# Replace hardcoded API key with:
+deepseek = DeepSeekAI(api_key=os.getenv('DEEPSEEK_API_KEY'))
 
 app = Flask(__name__)
 
