@@ -1,0 +1,40 @@
+/* File: frontend/src/App.css */
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  text-align: center;
+}
+
+input {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.summary {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
