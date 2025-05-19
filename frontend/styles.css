@@ -1,0 +1,53 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.summarizer-form {
+  display: flex;
+  gap: 10px;
+}
+
+.summarizer-form input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.summarizer-form button {
+  padding: 10px 20px;
+  background: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.result-container {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.summary-text {
+  white-space: pre-line;
+}
+
+.stats {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.error {
+  color: #ff0000;
+}
