@@ -1,5 +1,5 @@
-fastapi
-uvicorn
-requests
+flask
+flask-cors
 beautifulsoup4
+requests
 python-dotenv
