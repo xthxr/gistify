@@ -1,5 +1,0 @@
-flask
-flask-cors
-beautifulsoup4
-requests
-python-dotenv
