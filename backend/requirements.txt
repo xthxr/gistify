@@ -3,4 +3,4 @@ flask-cors
 python-dotenv
 beautifulsoup4
 httpx
-pip install "flask[async]"
+"flask[async]"
