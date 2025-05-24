@@ -1,26 +1,4 @@
-npm install react-simple-typewriter
 import ReactMarkdown from 'react-markdown';
-import React from 'react';
-import { Typewriter } from 'react-simple-typewriter';
-
-const SummaryDisplay = ({ summary }) => {
-  return (
-    <div>
-      <Typewriter
-        words={[summary]}
-        loop={1}
-        cursor
-        cursorStyle='_'
-        typeSpeed={50}
-        deleteSpeed={50}
-        delaySpeed={1000}
-      />
-    </div>
-  );
-};
-
-export default SummaryDisplay;
-
 
 const Result = ({ data }) => {
   return (
