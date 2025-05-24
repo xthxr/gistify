@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 }
+
+/* In src/App.css or index.css */
+.blinking-cursor {
+  animation: blink 1s infinite;
+  color: #888;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
