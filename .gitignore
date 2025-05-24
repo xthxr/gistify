@@ -1,0 +1,6 @@
+backend/.env
+backend/athar
+
+frontend/.env
+frontend/.gitignore
+frontend/node_modules

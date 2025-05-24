@@ -13,7 +13,11 @@ function App() {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('https://your-render-backend-url/summarize', {
+      console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL); // Log the backend URL t
+      // Use the environment variable for the backend URL
+      const backendUrl = import.meta.env.VITE_BACKEND_URL; // Provide a fallback for safety
+      
+      const response = await fetch(`${backendUrl}/summarize`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,6 +30,7 @@ function App() {
       }
 
       const data = await response.json();
+      console.log('Received data:', data); // Add this line
       setSummary(data);
     } catch (err) {
       setError(err.message);
