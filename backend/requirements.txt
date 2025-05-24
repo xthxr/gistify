@@ -3,4 +3,4 @@ flask-cors
 python-dotenv
 beautifulsoup4
 httpx
-"flask[async]"
+flask[async]
