@@ -1,8 +1,16 @@
+import React, { useRef, useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useRef } from 'react';
 
 const Result = ({ data }) => {
   const utteranceRef = useRef(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  // Stop speech when component unmounts
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   const downloadSummary = () => {
     const element = document.createElement('a');
@@ -14,12 +22,23 @@ const Result = ({ data }) => {
     document.body.removeChild(element);
   };
 
-  const readAloud = () => {
-    if (utteranceRef.current) {
-      window.speechSynthesis.cancel();
+  const toggleReadAloud = () => {
+    const synth = window.speechSynthesis;
+
+    if (isSpeaking) {
+      synth.cancel();
+      setIsSpeaking(false);
+    } else {
+      utteranceRef.current = new SpeechSynthesisUtterance(data.summary);
+      const voices = synth.getVoices();
+      utteranceRef.current.voice = voices.find(v => v.lang === 'en-US') || voices[0];
+
+      utteranceRef.current.onend = () => setIsSpeaking(false);
+      utteranceRef.current.onerror = () => setIsSpeaking(false);
+
+      setIsSpeaking(true);
+      synth.speak(utteranceRef.current);
     }
-    utteranceRef.current = new window.SpeechSynthesisUtterance(data.summary);
-    window.speechSynthesis.speak(utteranceRef.current);
   };
 
   return (
@@ -35,7 +54,9 @@ const Result = ({ data }) => {
       </div>
       <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
         <button onClick={downloadSummary}>Download Summary</button>
-        <button onClick={readAloud}>🔊 Read Aloud</button>
+        <button onClick={toggleReadAloud}>
+          {isSpeaking ? '🛑 Stop Reading' : '🔊 Read Aloud'}
+        </button>
       </div>
     </div>
   );
