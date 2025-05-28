@@ -112,8 +112,7 @@ yarn install
 Create a .env file in the frontend/ directory to specify the backend API URL:
 
 ```
-VITE_BACKEND_API_URL=http://
-localhost:5000
+VITE_BACKEND_URL=http://localhost:5000
 ```
 ### 5. Running the Frontend
 Make sure you are in the frontend/ directory. Then start the development server:
