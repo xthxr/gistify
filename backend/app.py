@@ -7,6 +7,7 @@ from flask_cors import CORS
 import asyncio
 import PyPDF2
 from io import BytesIO
+import yake  # <-- Added for keyword extraction
 
 # Load environment variables
 load_dotenv()
@@ -53,10 +54,15 @@ except Exception as e:
     return jsonify({"error": f"Failed to summarize: {str(e)}"}), 500
 
     summary_length = len(summary)
+
+    # Extract keywords using YAKE
+    keywords = extract_keywords(summary)
+
     return jsonify({
         'summary': summary,
         'original_length': original_length,
-        'summary_length': summary_length
+        'summary_length': summary_length,
+        'keywords': keywords
     })
 
 
@@ -89,6 +95,14 @@ async def call_gemini_api(content, reduction):
     result = response.json()
     summary = result.get('candidates', [{}])[0].get('content', {}).get('parts', [{}])[0].get('text', 'No summary returned by API.')
     return summary
+
+
+def extract_keywords(text, max_keywords=10):
+    kw_extractor = yake.KeywordExtractor(lan="en", top=max_keywords)
+    keywords = kw_extractor.extract_keywords(text)
+    # Return only the keyword strings (not their scores)
+    return [kw[0] for kw in keywords]
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), debug=True)
