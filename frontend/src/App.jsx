@@ -8,32 +8,44 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleSummarize = async (url) => {
+  const handleSummarize = async (payload) => {
     try {
       setLoading(true);
       setError(null);
-      
-      console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL); // Log the backend URL t
-      // Use the environment variable for the backend URL
-      const backendUrl = import.meta.env.VITE_BACKEND_URL; // Provide a fallback for safety
-      
-      const response = await fetch(`${backendUrl}/summarize`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url }),
-      });
+      setSummary(null);
+
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+      let response;
+
+      if (payload.inputType === 'pdf') {
+        const formData = new FormData();
+        formData.append('pdf', payload.pdfFile);
+        formData.append('reduction', payload.reduction);
+
+        response = await fetch(`${backendUrl}/summarize`, {
+          method: 'POST',
+          body: formData,
+        });
+      } else {
+        const body =
+          payload.inputType === 'url'
+            ? { url: payload.url, reduction: payload.reduction }
+            : { text: payload.text, reduction: payload.reduction };
+
+        response = await fetch(`${backendUrl}/summarize`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        });
+      }
 
       if (!response.ok) {
         throw new Error('Failed to summarize');
       }
-
       const data = await response.json();
-      console.log('Received data:', data); // Add this line
       setSummary(data);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Unknown error');
     } finally {
       setLoading(false);
     }
