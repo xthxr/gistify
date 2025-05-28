@@ -60,3 +60,22 @@ body {
 .error {
   color: #ff6666; /* Adjusted error color for dark background */
 }
+
+.summarizer-form select,
+.summarizer-form textarea,
+.summarizer-form input[type="range"],
+.summarizer-form input[type="file"] {
+  margin: 8px 0;
+  font-size: 1em;
+}
+.summarizer-form textarea {
+  width: 100%;
+}
+.summarizer-form label {
+  margin-bottom: 8px;
+}
+.result-container button {
+  padding: 8px 16px;
+  margin-right: 12px;
+  font-size: 1em;
+}
