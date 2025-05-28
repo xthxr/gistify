@@ -47,7 +47,11 @@ async def summarize():
         return jsonify({'error': 'No content to summarize'}), 400
 
     original_length = len(content)
+    try:
     summary = await call_gemini_api(content, reduction)
+except Exception as e:
+    return jsonify({"error": f"Failed to summarize: {str(e)}"}), 500
+
     summary_length = len(summary)
     return jsonify({
         'summary': summary,
