@@ -1,8 +1,9 @@
 import ReactMarkdown from 'react-markdown';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 const Result = ({ data }) => {
   const utteranceRef = useRef(null);
+  const [readingAloud, setReadingAloud] = useState(false);
 
   const downloadSummary = () => {
     const element = document.createElement('a');
@@ -20,6 +21,15 @@ const Result = ({ data }) => {
     }
     utteranceRef.current = new window.SpeechSynthesisUtterance(data.summary);
     window.speechSynthesis.speak(utteranceRef.current);
+    setReadingAloud(true);
+  };
+
+  const stopDictation = () => {
+    if (utteranceRef.current) {
+      window.speechSynthesis.cancel();
+      utteranceRef.current = null;
+    }
+    setReadingAloud(false);
   };
 
   return (
@@ -35,7 +45,9 @@ const Result = ({ data }) => {
       </div>
       <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
         <button onClick={downloadSummary}>Download Summary</button>
-        <button onClick={readAloud}>🔊 Read Aloud</button>
+        <button onClick={readingAloud ? stopDictation : readAloud}>
+          {readingAloud ? '🔇 Stop Dictation' : '🔉 Read Aloud'}
+        </button>
       </div>
     </div>
   );
