@@ -40,8 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+/* Highlighting for markdown strong (keywords) */
 .markdown strong {
   background-color: yellow;
   color: black;
 }
-
