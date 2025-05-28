@@ -1,139 +1,120 @@
 # Gistify
 
-Gistify is a web application that summarizes content from a given URL  using the Gemini API and displays the summary along with relevant statistics.
+Gistify is a modern web application that lets you instantly summarize content from any webpage, PDF, or pasted text using the Gemini API. It not only provides concise summaries but also highlights the most important lines, offers screen reading, and gives you full control over the summary panel's appearance with warmth and light/dark modes.
 
-## Project Structure
+---
 
-The project is divided into two main 
-parts:
+## ✨ Features
 
-- `backend/`: Contains the Python 
-Flask application that handles fetching 
-content, calling the Gemini API for 
-summarization, and serving the API 
-endpoints.
-- `frontend/`: Contains the React 
-application built with Vite that 
-provides the user interface for 
-inputting URLs and displaying the 
-summarization results.
+- **One-Click Summarization**  
+  Input a URL, paste text, or upload a PDF. Get a clear, concise summary in seconds.
 
-### Prerequisites
+- **Important Line Highlighting**  
+  Gistify automatically detects and highlights key lines in your summary with a yellow strip for quick insight.
 
-Before you begin, ensure you have the 
-following installed:
+- **Screen Reading Mode**  
+  Listen to your summary with a built-in read-aloud feature—great for accessibility and multitasking.
 
--   Python 3.7+
--   Node.js (LTS version recommended)
--   npm or yarn
--   Git
+- **Warmth & Theme Control**  
+  Adjust the summary panel’s warmth (cool/neutral/warm) and toggle between light and dark modes to match your reading comfort.
 
-## Setup and Running
+- **Download & Stats**  
+  Download summaries as text files and view original vs. summary length and reduction stats.
 
-Follow these steps to set up and run the Gistify application locally.
+---
 
-### 1. Clone the Repository
+## 🚀 Quick Start
 
-If you haven't already, clone the 
-project repository:
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/xthxr/gistify.git
-cd gistify
+git clone https://github.com/xthxr/gistify.git
+cd gistify
 ```
-
 
 ### 2. Backend Setup
-Navigate to the backend directory:
 
-```
-cd backend
-```
-Create a Virtual Environment
-
-It's recommended to use a virtual environment to manage dependencies:
-
-```
-python -m venv venv
-``` 
-Activate the Virtual Environment
-- On Windows:
-  
+- Ensure you have Python 3.7+.
+- Install dependencies:
+  ```bash
+  cd backend
+  pip install -r requirements.txt
   ```
-  .\venv\Scripts\activate
+- Create a `.env` file with your Gemini API key:
   ```
-- On macOS and Linux:
-  
+  GEMINI_API_KEY=your_gemini_api_key
   ```
-  source venv/bin/activate
-  ``` 
-## Install Dependencies
+- Start the backend server:
+  ```bash
+  python app.py
+  ```
 
-Install the required Python packages:
+### 3. Frontend Setup
 
-```
-pip install -r requirements.txt
-```
-Set up Environment Variables
+- Ensure you have Node.js LTS.
+- Install frontend dependencies:
+  ```bash
+  cd ../frontend
+  npm install
+  ```
+- Create `.env` in `frontend/`:
+  ```
+  VITE_BACKEND_URL=http://localhost:5000
+  ```
+- Start the frontend:
+  ```bash
+  npm run dev
+  ```
+- Visit [http://localhost:5173](http://localhost:5173) in your browser.
 
-Create a .env file in the backend/ directory with your Gemini API key:
+---
 
-```
-GEMINI_API_KEY=YOUR_GEMINI_API_KEY
-```
-Replace YOUR_GEMINI_API_KEY with your actual API key obtained from the Google AI Studio or Google Cloud.
+## 🖥️ Usage
 
-### 3. Running the Backend
-Make sure your virtual environment is activated and you are in the backend/ directory. Then run the Flask application:
+1. Enter a URL, paste text, or upload a PDF.
+2. Set your desired summary reduction.
+3. Click **Summarize**.
+4. View your summary, highlighted lines, and stats.
+5. Use theme/warmth controls and screen reading as needed.
+6. Download your summary if you wish!
 
-```
-python app.py
-```
-The backend server should start and run on http://192.168.something.something:5000/ or a similar address.
+---
 
-### 4. Frontend Setup
-Open a new terminal window or tab and navigate to the frontend directory:
-
-```
-cd ..
-cd frontend
-```
-### Install Dependencies
-
-Install the required Node.js packages using npm or yarn:
-
-```
-npm install
-# or
-yarn install
-```
-### Set up Environment Variables
-
-Create a .env file in the frontend/ directory to specify the backend API URL:
+## 🛠️ Project Structure
 
 ```
-VITE_BACKEND_API_URL=http://
-localhost:5000
+gistify/
+  backend/    # Flask backend (Python) - summarization API
+  frontend/   # React frontend (Vite) - user interface
 ```
-### 5. Running the Frontend
-Make sure you are in the frontend/ directory. Then start the development server:
 
-```
-npm run dev
-# or
-yarn dev
-```
-The frontend application should open in your browser, usually at http://localhost:5173/ or a similar address.
+---
 
-## Usage
-1. Ensure both the backend and frontend servers are running.
-2. Open the frontend application in your web browser.
-3. Enter the URL of the content you want to summarize in the input field.
-4. Click the "Summarize" button.
-5. The summarization result, including the summary text, original length, summary length, and reduction percentage, will be displayed.
-## Contributing
-If you'd like to contribute, please fork the repository and create a pull request.
+## 🤝 Contributing
 
-### CONTRIBUTORS:
-- rajeet-04 (https://github.com/rajeet-04)
-- xthxr (https://github.com/xthxr)
+We welcome contributions! To get started:
+
+1. Fork this repo.
+2. Create a feature branch.
+3. Commit your changes.
+4. Open a pull request.
+
+Check the [issues](https://github.com/xthxr/gistify/issues) for things to work on or suggest your own ideas.
+
+---
+
+## 👤 Contributors
+
+- [rajeet-04](https://github.com/rajeet-04)
+- [xthxr](https://github.com/xthxr)
+- [iankitsinghak](https://github.com/iankitsinghak)
+
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+> Made with ❤️ using Flask, React, and the Gemini API.
