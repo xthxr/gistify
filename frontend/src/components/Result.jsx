@@ -5,7 +5,6 @@ const Result = ({ data }) => {
   const utteranceRef = useRef(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  // Stop speech when component unmounts
   useEffect(() => {
     return () => {
       window.speechSynthesis.cancel();
@@ -41,11 +40,20 @@ const Result = ({ data }) => {
     }
   };
 
+  const highlightKeywords = (text, keywords) => {
+    if (!keywords || keywords.length === 0) return text;
+
+    const regex = new RegExp(`\\b(${keywords.join('|')})\\b`, 'gi');
+    return text.replace(regex, '**$1**'); // markdown bold
+  };
+
+  const highlightedSummary = highlightKeywords(data.summary, data.keywords);
+
   return (
     <div className="result-container">
       <h2>Summarization Result</h2>
       <div className="summary-text">
-        <ReactMarkdown>{data.summary}</ReactMarkdown>
+        <ReactMarkdown>{highlightedSummary}</ReactMarkdown>
       </div>
       <div className="stats">
         <p>Original length: {data.original_length} characters</p>
