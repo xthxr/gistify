@@ -33,32 +33,52 @@ body {
 }
 
 .result-container {
-  background-color: #333; /* Dark grey background */
-  color: #f0f0f0; /* Off-white text color for the container */
-  padding: 30px; /* Increased padding */
-  border-radius: 10px; /* Softer corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-  /* Adding a subtle noise texture for paper feel */
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAEAQMAAAAmVc54AAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAABRJREFUCNdjQAH+f4b/BwMAgAEAD/8E/z8AAAAASUVORK5CYII=');
-  background-repeat: repeat;
+  background-color: #333; /* Default dark mode */
+  color: #f0f0f0;
+  padding: 30px;
+  border-radius: 10px;
+  transition: background 0.3s, color 0.3s, filter 0.3s;
+}
+.result-container.light {
+  background: #fff;
+  color: #222;
+}
+.result-container.dark {
+  background: #222;
+  color: #f0f0f0;
+}
+.result-container.warm {
+  /* handled via inline style filter */
+}
+.result-container.cool {
+  /* handled via inline style filter */
 }
 
 .summary-text {
   white-space: pre-line;
-  color: #f0f0f0; /* Off-white text color for the summary */
   font-size: 18px;
-  line-height: 1.8; /* Improved line spacing for readability */
-  margin-bottom: 20px; /* Increased space below summary */
+  line-height: 1.8;
+  margin-bottom: 20px;
 }
 
+/* NEW: highlight-line style */
+.highlight-line {
+  background: linear-gradient(90deg, #fffbe6, #fff9b2);
+  border-left: 4px solid #ffe066;
+  padding: 2px 8px;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Existing styles... */
 .stats {
   margin-top: 20px;
   font-size: 14px;
-  color: #ccc; /* Lighter color for stats on dark background */
+  color: #ccc;
 }
-
 .error {
-  color: #ff6666; /* Adjusted error color for dark background */
+  color: #ff6666;
 }
 
 .summarizer-form select,
