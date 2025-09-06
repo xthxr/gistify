@@ -136,6 +136,7 @@ If you'd like to contribute, please fork the repository and create a pull reques
 
 ### CONTRIBUTORS:
 - xthxr (https://github.com/xthxr)
+- rajeet-04 (https://github.com/rajeet-04)
 - ankit (https://github.com/Iankitsinghak)
 - roky (https://github.com/R47148)
 - subhankar (https://github.com/suvancodes)
