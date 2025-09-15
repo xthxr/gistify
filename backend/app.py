@@ -65,6 +65,31 @@ except Exception as e:
         'keywords': keywords
     })
 
+from flask import request, jsonify
+import google.generativeai as genai
+
+@app.route('/ask-question', methods=['POST'])
+def ask_question():
+    data = request.get_json()
+    summary = data['summary']
+    question = data['question']
+
+    prompt = f"""Based on the following summary, answer the user's question.
+
+    Summary:
+    {summary}
+
+    Question:
+    {question}
+
+    Answer:"""
+
+    try:
+        response = genai.GenerativeModel("gemini-pro").generate_content(prompt)
+        answer = response.text.strip()
+        return jsonify({"answer": answer})
+    except Exception as e:
+        return jsonify({"answer": "❌ Sorry, something went wrong."}), 500
 
 async def call_gemini_api(content, reduction):
     api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
